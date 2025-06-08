@@ -1,0 +1,76 @@
+dn: dc=carlete,dc=sl
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: Carlete SL
+dc: carlete
+structuralObjectClass: organization
+entryUUID: 0666746e-d4f1-103f-89d0-fd79a674b163
+creatorsName: cn=admin,dc=carlete,dc=sl
+createTimestamp: 20250603180506Z
+entryCSN: 20250603180506.735575Z#000000#000#000000
+modifiersName: cn=admin,dc=carlete,dc=sl
+modifyTimestamp: 20250603180506Z
+
+dn: ou=Usuarios,dc=carlete,dc=sl
+objectClass: organizationalUnit
+ou: Usuarios
+structuralObjectClass: organizationalUnit
+entryUUID: 06cf2c2a-d4f1-103f-82f1-2fad536e4a94
+creatorsName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+createTimestamp: 20250603180507Z
+entryCSN: 20250603180507.421870Z#000000#000#000000
+modifiersName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+modifyTimestamp: 20250603180507Z
+
+dn: ou=Grupos,dc=carlete,dc=sl
+objectClass: organizationalUnit
+ou: Grupos
+structuralObjectClass: organizationalUnit
+entryUUID: 06d03dae-d4f1-103f-82f2-2fad536e4a94
+creatorsName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+createTimestamp: 20250603180507Z
+entryCSN: 20250603180507.428870Z#000000#000#000000
+modifiersName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+modifyTimestamp: 20250603180507Z
+
+dn: cn=carlos,ou=Usuarios,dc=carlete,dc=sl
+objectClass: inetOrgPerson
+cn: carlos
+sn: Martinez
+uid: carlos
+userPassword:: Y2FybG9zMTIz
+structuralObjectClass: inetOrgPerson
+entryUUID: 06d0f1f4-d4f1-103f-82f3-2fad536e4a94
+creatorsName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+createTimestamp: 20250603180507Z
+entryCSN: 20250603180507.433487Z#000000#000#000000
+modifiersName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+modifyTimestamp: 20250603180507Z
+
+dn: cn=admins,ou=Grupos,dc=carlete,dc=sl
+objectClass: groupOfNames
+cn: admins
+member: cn=administrador,ou=Usuarios,dc=carlete,dc=sl
+structuralObjectClass: groupOfNames
+entryUUID: 06d1e762-d4f1-103f-82f4-2fad536e4a94
+creatorsName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+createTimestamp: 20250603180507Z
+entryCSN: 20250603180507.439769Z#000000#000#000000
+modifiersName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+modifyTimestamp: 20250603180507Z
+
+dn: cn=administrador,ou=Usuarios,dc=carlete,dc=sl
+objectClass: inetOrgPerson
+cn: administrador
+sn: Principal
+uid: administrador
+userPassword:: YWRtaW4xMjM=
+structuralObjectClass: inetOrgPerson
+entryUUID: 06d2e586-d4f1-103f-82f5-2fad536e4a94
+creatorsName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+createTimestamp: 20250603180507Z
+entryCSN: 20250603180507.446275Z#000000#000#000000
+modifiersName: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+modifyTimestamp: 20250603180507Z
+

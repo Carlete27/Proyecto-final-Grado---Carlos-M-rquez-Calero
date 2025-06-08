@@ -1,0 +1,40 @@
+version: "3.3"
+
+services:
+  ldap:
+    build: 
+      context: ./ldap
+      dockerfile: Dockerfile
+    container_name: openldap
+    env_file:
+    - .env
+    ports:
+      - "389:389"
+    volumes:
+      - ./ldap/Seguridad/:/ldap/Seguridad/
+    networks:
+      red_gestion:
+        ipv4_address: 192.168.10.2
+
+  apachephp:
+    build: 
+      context: ./apache-php
+      dockerfile: Dockerfile
+    container_name: apache-php
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/var/www/html
+      - //var/run/docker.sock:/var/run/docker.sock
+    networks:
+      red_gestion:
+        ipv4_address: 192.168.10.10
+    depends_on:
+      - ldap
+    
+networks:
+  red_gestion:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24

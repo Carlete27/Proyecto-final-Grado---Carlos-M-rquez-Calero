@@ -33,36 +33,53 @@ class ModeloLDAP {
     // FUNCIONES DE AUTENTICACIÓN
     // ====================================================================
 
-    // Función para verificar si las credenciales de un usuario son correctas
-    public function authenticate($user, $password) {
-        // Construimos el DN (Distinguished Name) completo del usuario
-        $dn = "cn=$user,ou=Usuarios,dc=carlete,dc=sl";
-        
-        // Intentamos autenticar con el usuario y contraseña proporcionados
-        // El @ suprime los warnings de PHP si falla la autenticación
-        return @ldap_bind($this->ldapconn, $dn, $password);
+  // Función para verificar si las credenciales de un usuario son correctas
+public function authenticate($user, $password) {
+    // Definimos los dos tipos de DN posibles
+    $dntipo1 = "cn=$user,ou=Usuarios,dc=carlete,dc=sl";
+    $dntipo2 = "uid=$user,ou=Usuarios,dc=carlete,dc=sl";
+    
+    // Intentamos autenticar primero con el tipo 1 (cn)
+    $auth1 = @ldap_bind($this->ldapconn, $dntipo1, $password);
+    
+    if ($auth1) {
+        return true; // Autenticación exitosa con DN tipo 1
     }
+    
+    // Si falla con tipo 1, intentamos con tipo 2 (uid)
+    $auth2 = @ldap_bind($this->ldapconn, $dntipo2, $password);
+    
+    return $auth2; // Retorna true si funciona con tipo 2, false si ambos fallan
+}
 
-    // Función para verificar si un usuario tiene permisos de administrador
-    public function isAdmin($user) {
-        // Nos autenticamos como admin para realizar la consulta
-        $this->bindAdmin();
-        
-        // Definimos dónde buscar (en el grupo de administradores)
-        $base = "cn=admins,ou=Grupos,dc=carlete,dc=sl";
-        
-        // Creamos un filtro para buscar si el usuario está en el grupo "admins"
-        $filtro = "(member=cn=$user,ou=Usuarios,dc=carlete,dc=sl)";
-        
-        // Ejecutamos la búsqueda
-        $resultado = ldap_search($this->ldapconn, $base, $filtro);
-        
-        // Obtenemos los resultados
-        $entrada = ldap_get_entries($this->ldapconn, $resultado);
-        
-        // Si encontró resultados, el usuario es admin
-        return ($entrada["count"] > 0);
+// Función para verificar si un usuario tiene permisos de administrador
+public function isAdmin($user) {
+    // Nos autenticamos como admin para realizar la consulta
+    $this->bindAdmin();
+    
+    // Definimos dónde buscar (en el grupo de administradores)
+    $base = "cn=admins,ou=Grupos,dc=carlete,dc=sl";
+    
+    // Creamos filtros para buscar con ambos tipos de DN
+    $filtro1 = "(member=cn=$user,ou=Usuarios,dc=carlete,dc=sl)";
+    $filtro2 = "(member=uid=$user,ou=Usuarios,dc=carlete,dc=sl)";
+    
+    // Ejecutamos la búsqueda con el primer filtro (cn)
+    $resultado1 = @ldap_search($this->ldapconn, $base, $filtro1);
+    $entrada1 = @ldap_get_entries($this->ldapconn, $resultado1);
+    
+    // Si encontró resultados con el primer filtro, es admin
+    if ($entrada1 && $entrada1["count"] > 0) {
+        return true;
     }
+    
+    // Si no encontró con el primer filtro, probamos con el segundo (uid)
+    $resultado2 = @ldap_search($this->ldapconn, $base, $filtro2);
+    $entrada2 = @ldap_get_entries($this->ldapconn, $resultado2);
+    
+    // Retorna true si encontró resultados con cualquiera de los dos filtros
+    return ($entrada2 && $entrada2["count"] > 0);
+}
 
     // ====================================================================
     // FUNCIONES DE GESTIÓN DE USUARIOS
@@ -73,8 +90,8 @@ class ModeloLDAP {
         $this->bindAdmin();
         $baseDn = "ou=Usuarios,dc=carlete,dc=sl";
         $filter = "(objectClass=inetOrgPerson)";
-        $result = ldap_search($this->ldapconn, $baseDn, $filter);
-        return ldap_get_entries($this->ldapconn, $result);
+        $result = @ldap_search($this->ldapconn, $baseDn, $filter);
+        return @ldap_get_entries($this->ldapconn, $result);
     }
 
     // Función para obtener todos los usuarios del sistema de forma limpia
@@ -128,7 +145,7 @@ class ModeloLDAP {
     public function deleteUser($uid) {
         $this->bindAdmin();
         $dn = "uid=$uid,ou=Usuarios,dc=carlete,dc=sl";
-        return ldap_delete($this->ldapconn, $dn);
+        return @ldap_delete($this->ldapconn, $dn);
     }
 
     // Función para obtener información de un usuario específico
@@ -136,8 +153,8 @@ class ModeloLDAP {
         $this->bindAdmin();
         $baseDn = "ou=Usuarios,dc=carlete,dc=sl";
         $filter = "(uid=$uid)";
-        $result = ldap_search($this->ldapconn, $baseDn, $filter);
-        $entries = ldap_get_entries($this->ldapconn, $result);
+        $result = @ldap_search($this->ldapconn, $baseDn, $filter);
+        $entries = @ldap_get_entries($this->ldapconn, $result);
         
         // Si encontramos el usuario, devolvemos su información
         if ($entries['count'] > 0) {
@@ -244,7 +261,7 @@ class ModeloLDAP {
             $entry["member"] = ["cn=admin,dc=carlete,dc=sl"];
         }
         
-        return ldap_add($this->ldapconn, $dn, $entry);
+        return @ldap_add($this->ldapconn, $dn, $entry);
     }
 
     // Función para eliminar un grupo del sistema
@@ -257,7 +274,7 @@ class ModeloLDAP {
             return false;
         }
         
-        return ldap_delete($this->ldapconn, $dn);
+        return @ldap_delete($this->ldapconn, $dn);
     }
 
     // Función para obtener información completa de un grupo
@@ -323,10 +340,10 @@ class ModeloLDAP {
         $groupDn = "cn=$groupCn,ou=Grupos,dc=carlete,dc=sl";
         
         // Obtenemos los miembros actuales del grupo
-        $result = ldap_search($this->ldapconn, $groupDn, "(objectClass=groupOfNames)");
+        $result = @ldap_search($this->ldapconn, $groupDn, "(objectClass=groupOfNames)");
         if (!$result) return false;
         
-        $entries = ldap_get_entries($this->ldapconn, $result);
+        $entries = @ldap_get_entries($this->ldapconn, $result);
         if ($entries['count'] == 0) return false;
         
         $group = $entries[0];
@@ -346,7 +363,7 @@ class ModeloLDAP {
         
         // Actualizamos el grupo con la nueva lista de miembros
         $entry = ["member" => $members];
-        return ldap_modify($this->ldapconn, $groupDn, $entry);
+        return @ldap_modify($this->ldapconn, $groupDn, $entry);
     }
 
 

@@ -1,5 +1,17 @@
 <div class="container py-5">
     <h2 class="text-center mb-4">Listado de Grupos</h2>
+    <div class="col-md-8">
+                <!-- Mensajes de éxito/error específicos para usuarios -->
+                <?php if (!empty($_SESSION['mensaje_exito'])): ?>
+                    <div class="alert alert-success text-center">
+                        <?= htmlspecialchars($_SESSION['mensaje_exito']); unset($_SESSION['mensaje_exito']); ?>
+                    </div>
+                <?php elseif (!empty($_SESSION['mensaje_error'])): ?>
+                    <div class="alert alert-danger text-center">
+                        <?= htmlspecialchars($_SESSION['mensaje_error']); unset($_SESSION['mensaje_error']); ?>
+                    </div>
+                <?php endif; ?>
+    </div>
     <div class="table-responsive">
         <!-- Tabla para mostrar información de grupos LDAP -->
         <table class="table table-bordered table-hover text-center">

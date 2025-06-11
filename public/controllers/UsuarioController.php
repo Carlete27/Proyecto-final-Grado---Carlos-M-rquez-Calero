@@ -25,26 +25,6 @@ class UsuarioController {
         View::show("views/lista_usuarios.php", $usuarios);
     }
 
-    /**
-     * Método para mostrar el detalle de un usuario específico
-     * Obtiene el usuario por su UID y muestra toda su información
-     */
-    public function detalle() {
-        // Obtener UID desde los parámetros GET
-        $uid = $_GET['uid'] ?? null;
-        
-        if ($uid) {
-            $ldap = new ModeloLDAP();
-            $usuario = $ldap->getUserByUid($uid);
-            
-            // Mostrar la vista de detalle con la información del usuario
-            View::show("views/detalle_usuario.php", ["usuario" => $usuario]);
-        } else {
-            // Redirigir si no hay UID especificado
-            header("Location: index.php?controller=UsuarioController&action=listar");
-            exit;
-        }
-    }
 
     /**
      * Método para eliminar un usuario del sistema

@@ -1,5 +1,17 @@
 <div class="container py-5">
     <h2 class="text-center mb-4">Listado de Usuarios</h2>
+    <div class="col-md-8">
+                <!-- Manejo de mensajes de éxito/error de sesión -->
+                <?php if (!empty($_SESSION['success'])): ?>
+                    <div class="alert alert-success text-center">
+                        <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                    </div>
+                <?php elseif (!empty($_SESSION['error'])): ?>
+                    <div class="alert alert-danger text-center">
+                        <?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                    </div>
+                <?php endif; ?>
+    </div>            
     <div class="table-responsive">
         <!-- Tabla para mostrar información de usuarios LDAP -->
         <table class="table table-bordered table-hover text-center">

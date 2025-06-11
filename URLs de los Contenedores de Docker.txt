@@ -1,0 +1,7 @@
+URLs de los Contenedores de Docker:
+
+- openldap: https://hub.docker.com/r/osixia/openldap (Docker Hub)
+	    https://github.com/osixia/docker-openldap/releases/tag/v1.5.0 (GitHub Oficial)
+
+- php:8.1-apache: https://hub.docker.com/layers/php/library/php/8.1-apache/images/sha256-940dbf46c39bf7afc3a0b3fa6bd815e4102513c50d63fb891376665af57101b6?context=explore (Docker Hub)
+

@@ -1,0 +1,39 @@
+dn: dc=carlete,dc=sl
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: Carlete SL
+dc: carlete
+structuralObjectClass: organization
+
+dn: ou=Usuarios,dc=carlete,dc=sl
+objectClass: organizationalUnit
+ou: Usuarios
+structuralObjectClass: organizationalUnit
+
+dn: ou=Grupos,dc=carlete,dc=sl
+objectClass: organizationalUnit
+ou: Grupos
+structuralObjectClass: organizationalUnit
+
+dn: cn=carlos,ou=Usuarios,dc=carlete,dc=sl
+objectClass: inetOrgPerson
+cn: carlos
+sn: Martinez
+uid: carlos
+userPassword:: Y2FybG9zMTIz
+structuralObjectClass: inetOrgPerson
+
+dn: cn=administrador,ou=Usuarios,dc=carlete,dc=sl
+objectClass: inetOrgPerson
+cn: administrador
+sn: Principal
+uid: administrador
+userPassword:: YWRtaW4xMjM=
+structuralObjectClass: inetOrgPerson
+
+dn: cn=admins,ou=Grupos,dc=carlete,dc=sl
+objectClass: groupOfNames
+cn: admins
+member: uid=administrador,ou=Usuarios,dc=carlete,dc=sl
+structuralObjectClass: groupOfNames
